@@ -1,0 +1,44 @@
+
+.hero-purpose{font-size:16px;line-height:1.6;margin:14px 0 0;color:#545b61}
+.teaser-flow.policy-showcase{margin-top:19px;padding-top:19px;text-align:left}
+.teaser-deployment{display:grid;grid-template-columns:minmax(180px,1fr) minmax(430px,1.9fr) minmax(180px,1fr);align-items:center;gap:8px}
+.flow-media{min-width:0;align-self:start}
+.flow-media h2{font:600 15px/1.5 Inter,sans-serif;letter-spacing:0;color:#373e44;margin:0 0 8px;text-align:center}
+.flow-window{position:relative;overflow:hidden;aspect-ratio:1;background:#fff;border:1px solid #e4e7e8}
+.teaser-flow .flow-window video.hero-video{position:absolute;max-width:none;height:auto;aspect-ratio:auto;object-fit:initial;border:0;border-radius:0;display:block;pointer-events:none}
+.flow-media>p{margin:7px 0 0;font-size:14px;line-height:1.5;text-align:center;color:#677078}
+.control-flow{display:block;width:100%;height:auto;overflow:visible}
+.control-flow text{font-family:Inter,-apple-system,sans-serif;text-anchor:middle;fill:#454e55;font-size:14px}
+.control-flow .flow-node-label{font-size:15px;font-weight:500;fill:#2e373e}
+.control-flow .flow-wires path{fill:none;stroke:#a5adb2;stroke-width:1.3;stroke-linejoin:round}
+.control-flow .flow-wires .accent-wire{stroke:#a1846b}
+.flow-node,.flow-sum{fill:#fff;stroke:#bbc3c8;stroke-width:1.1}
+.flow-policy-node{fill:#f7f3ee;stroke:#b49a83;stroke-width:1.2}
+.control-flow .flow-plus{font-size:24px;font-family:Georgia,serif}
+.flow-signals use{fill:none;stroke:#a07651;stroke-width:2;stroke-linecap:round;stroke-dasharray:4 100;animation:flow-travel 4s linear infinite;animation-play-state:paused}
+.teaser-flow[data-playing=true] .flow-signals use{animation-play-state:running}
+@keyframes flow-travel{to{stroke-dashoffset:-208}}
+.flow-learning{font-size:14px;line-height:1.6;margin:9px 0 17px;color:#636b72;text-align:center}
+.flow-learning strong{font-weight:500;color:#634a35;margin-right:5px}
+.fitting-contrast{display:grid;grid-template-columns:310px 1fr;gap:14px;align-items:center;padding:14px 0;border-top:1px solid #e0e3e5;border-bottom:1px solid #e0e3e5;font-size:14px;line-height:1.5;color:#616b73}
+.fitting-contrast strong{font-weight:500;display:block;color:#424b53}
+.fitting-contrast>div>span{display:block;margin-top:3px}
+.fitting-route{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fitting-route b{font-weight:500;font-variant-numeric:tabular-nums}
+.fitting-route i{font-style:normal;color:#9ca3a8}
+.fitting-route .fitting-step{padding:6px 10px;background:#f5f6f6;border:1px solid #e1e4e6;white-space:nowrap}
+.teaser-flow .showcase-controls{justify-content:space-between;padding-top:13px;align-items:center;flex-wrap:wrap;color:#656d75}
+.teaser-flow .showcase-pagination{gap:7px}
+.teaser-flow .showcase-pagination output{font-size:14px;min-width:45px;font-variant-numeric:tabular-nums}
+.hero-auto{display:flex;align-items:center;gap:6px;margin-left:8px;font-size:14px;cursor:pointer}
+.hero-auto input{accent-color:var(--accent);width:14px;height:14px;margin:0}
+.teaser-flow>figcaption{font-size:14px!important;line-height:1.6;text-align:left!important;max-width:none;margin-top:10px!important;color:#6a737b!important}
+#hero-status:not([hidden]){display:block;color:#825332;margin-top:4px}
+@media(prefers-reduced-motion:reduce){.flow-signals{display:none}}
+@media(max-width:900px){.teaser-deployment{min-width:790px}.teaser-flow{overflow-x:auto}.fitting-contrast{min-width:790px}.flow-learning{min-width:790px}}
+.teaser-flow[data-reference="20201022-subject-10_20201022_111233"] .flow-window video{width:121.212121%;left:-13.535354%;top:-31.010101%}
+.teaser-flow[data-reference="3b1e6@3"] .flow-window video{width:155.844156%;left:-42.077922%;top:-53.636364%}
+.teaser-flow[data-reference="20200908-subject-05_20200908_143353"] .flow-window video{width:187.500000%;left:-50.468750%;top:-83.593750%}
+.teaser-flow[data-reference="67132@2"] .flow-window video{width:180.180180%;left:-60.060060%;top:-82.132132%}
+.teaser-flow[data-reference="20201022-subject-10_20201022_112409"] .flow-window video{width:169.491525%;left:-27.683616%;top:-86.581921%}
+.teaser-flow[data-reference="20034@0"] .flow-window video{width:124.481328%;left:-14.834025%;top:-25.933610%}
