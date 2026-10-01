@@ -307,11 +307,12 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
 (function(){
   'use strict';
   const d=window.REDEXT_PAPER, api=window.ReDexTCharts;
-  let transferMetric='success', localMetric='sr';
+  let transferMetric='success';
   const figures=[
     ['external-chart',el=>api.external(d,'all',el.clientWidth<500)],
     ['shared-chart',()=>api.sharedSummary(d)],
-    ['local-learning-chart',()=>window.ReDexTStory.adaptation(d,localMetric)]
+    ['local-learning-sr',()=>window.ReDexTStory.adaptation(d,'sr')],
+    ['local-learning-hcr',()=>window.ReDexTStory.adaptation(d,'hcr')]
   ];
   const redraw=[], drawById=new Map();
   for(const[id,option]of figures){
@@ -338,11 +339,6 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
     transferMetric=button.dataset.transferMetric;
     document.querySelectorAll('[data-transfer-metric]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
     drawById.get('transfer-chart')?.();
-  }));
-  document.querySelectorAll('[data-local-metric]').forEach(button=>button.addEventListener('click',()=>{
-    localMetric=button.dataset.localMetric;
-    document.querySelectorAll('[data-local-metric]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-    drawById.get('local-learning-chart')?.();
   }));
   const links=[...document.querySelectorAll('.contents a[href]')];
   const sections=links.filter(a=>a.hash).map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
