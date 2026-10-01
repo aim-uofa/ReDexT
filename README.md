@@ -1,14 +1,25 @@
-# ReDexT
+<h1 align="center">ReDexT</h1>
+<h3 align="center">Learning a Generalizable Residual Policy<br>for Dexterous Retargeting</h3>
 
-**Learning a Generalizable Residual Policy for Dexterous Retargeting**
+<p align="center">
+  <a href="https://chuan-10.github.io/">Jin-Chuan Shi</a><sup>*</sup> ·
+  Yangjinhui Xu<sup>*</sup> · Liyang Li ·
+  <a href="https://z-mu-z.github.io/">Muzhi Zhu</a><br>
+  Jiadong Hong · Yue Hu ·
+  <a href="https://stan-haochen.github.io/">Hao Chen</a> ·
+  <a href="https://cshen.github.io/">Chunhua Shen</a>
+</p>
 
-[Project page](https://aim-uofa.github.io/ReDexT/) · [Paper](https://aim-uofa.github.io/ReDexT/assets/paper.pdf)
+<p align="center">
+  State Key Lab of CAD &amp; CG, Zhejiang University<br>
+  <sup>*</sup>Equal contribution
+</p>
 
-Jin-Chuan Shi*, Yangjinhui Xu*, Liyang Li, Muzhi Zhu, Jiadong Hong, Yue Hu, Hao Chen, Chunhua Shen
-
-State Key Lab of CAD & CG, Zhejiang University
-
-*Equal contribution.
+<p align="center">
+  <strong><a href="https://aim-uofa.github.io/ReDexT/">Project Page</a></strong>
+  &nbsp;·&nbsp;
+  <strong><a href="https://aim-uofa.github.io/ReDexT/assets/paper.pdf">Paper</a></strong>
+</p>
 
 ReDexT learns shared residual feedback for dexterous retargeting. A trained policy corrects inverse-kinematics commands to execute new human hand-object trajectories with frozen weights, and supports optional local or shared adaptation for improved tracking.
 
