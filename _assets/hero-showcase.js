@@ -7,7 +7,7 @@
                                                                                     
   const selected = [
     '20201022-subject-10_20201022_111233', '3b1e6@3',
-    '20200908-subject-05_20200908_143353', '67132@2',
+    '20200908-subject-05_20200908_143353',
     '20201022-subject-10_20201022_112409', '20034@0'
   ].map(id => records.findIndex(record => record.id === id));
   let videos = [...root.querySelectorAll('video[data-hero-method]')];
