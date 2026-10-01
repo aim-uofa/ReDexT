@@ -1,5 +1,14 @@
 (() => {
   'use strict';
+  const navigation = document.querySelector('.project-nav');
+  if (navigation) {
+    const updateOffset = () => {
+      document.documentElement.style.setProperty('--nav-offset', `${Math.ceil(navigation.getBoundingClientRect().height) + 16}px`);
+    };
+    updateOffset();
+    if ('ResizeObserver' in window) new ResizeObserver(updateOffset).observe(navigation);
+    else window.addEventListener('resize', updateOffset);
+  }
   const citation = document.getElementById('citation-bibtex');
   const button = document.getElementById('copy-citation');
   const status = document.getElementById('citation-status');

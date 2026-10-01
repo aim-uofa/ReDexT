@@ -100,7 +100,10 @@
     swatch.className = 'comparison-errors-swatch';
     swatch.setAttribute('aria-hidden', 'true');
     if (method.dash) swatch.classList.add('comparison-errors-dashed');
-    toggle.append(swatch, document.createTextNode(method.label));
+    const label = document.createElement('span');
+    if (method.id === 'dexmachina') label.append('Dex', document.createElement('wbr'), 'Machina');
+    else label.textContent = method.label;
+    toggle.append(swatch, label);
     toggle.addEventListener('click', () => {
       if (enabled.has(method.id)) enabled.delete(method.id); else enabled.add(method.id);
       toggle.setAttribute('aria-pressed', String(enabled.has(method.id)));

@@ -430,6 +430,7 @@ window.REDEXT_PIPELINE = {"phases":[{"id":"bootstrap","title":"1 / 4  Bootstrap"
   if('IntersectionObserver'in window){new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;resume();},{threshold:.1}).observe(root);}else{visible=true;resume();}
   document.addEventListener('visibilitychange',resume);
   const motionChange=()=>{if(reduced.matches){running=false;phaseId='';root.dataset.phase='overview';updateButton();stopFrame();resetEmphasis();heading.textContent='The complete workflow';description.textContent=overview;mode.textContent=defaultMode;}};
+  motionChange();
   if(reduced.addEventListener)reduced.addEventListener('change',motionChange);
   else if(reduced.addListener)reduced.addListener(motionChange);
 }());
