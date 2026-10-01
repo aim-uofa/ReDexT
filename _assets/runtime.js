@@ -288,7 +288,7 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
   'use strict';
   function adaptation(d, metric) {
     const group=d.localAdaptation;
-    const names=['ReDexT (local)','ReDexT-B (local)','Local-RL'];
+    const names=['ReDexT (local)','Bootstrap only','From scratch'];
     const colors=['#bc652d','#426982','#818b93'];
     const lines=['solid','dashed','dotted'];
     return {animation:false,aria:{enabled:true},backgroundColor:'transparent',
@@ -298,7 +298,7 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
       xAxis:{type:'value',min:0,max:5000,interval:1000,name:'Additional updates per trajectory',nameLocation:'middle',nameGap:34,nameTextStyle:{fontSize:12},axisTick:{show:false},axisLine:{lineStyle:{color:'#c5c5c5'}},axisLabel:{color:'#656565',fontSize:12,formatter:v=>v?v/1000+'k':'0'},splitLine:{show:false}},
       yAxis:{type:'value',min:0,max:100,interval:25,axisLabel:{color:'#656565',fontSize:12},splitLine:{lineStyle:{color:'#e9e9e9'}}},
       tooltip:{trigger:'axis',confine:true,backgroundColor:'#fff',borderColor:'#ddd',textStyle:{fontFamily:'Inter, sans-serif',fontSize:12},formatter:ps=>'Update '+ps[0].value[0]+'<br>'+ps.map(p=>p.marker+' '+p.seriesName+': <b>'+p.value[1].toFixed(2)+'%</b> ('+p.value[2]+'/'+p.value[3]+')').join('<br>')},
-      series:[2,1,0].map((j,i)=>({type:'line',name:names[i],smooth:false,showSymbol:true,symbolSize:5,symbol:i===1?'diamond':'circle',lineStyle:{width:2.3,type:lines[i]},itemStyle:{color:colors[i]},emphasis:{focus:'series'},data:group.curves[j].observations.map(r=>[r.update,100*r[metric]/group.n,r[metric],group.n])}))};
+      series:[2,1,0].map((j,i)=>({type:'line',name:names[i],smooth:false,showSymbol:true,symbolSize:5,symbol:i===1?'diamond':'circle',lineStyle:{width:2.3,type:lines[i]},itemStyle:{color:colors[i]},emphasis:{focus:'series'},data:group.curves[j].observations.filter(r=>r.update>=501).map(r=>[r.update,100*r[metric]/group.n,r[metric],group.n])}))};
   }
   return {adaptation};
 });
@@ -307,10 +307,11 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
 (function(){
   'use strict';
   const d=window.REDEXT_PAPER, api=window.ReDexTCharts;
-  let transferMetric='success';
+  let transferMetric='success', localMetric='sr';
   const figures=[
     ['external-chart',el=>api.external(d,'all',el.clientWidth<500)],
-    ['shared-chart',()=>api.sharedSummary(d)]
+    ['shared-chart',()=>api.sharedSummary(d)],
+    ['local-learning-chart',()=>window.ReDexTStory.adaptation(d,localMetric)]
   ];
   const redraw=[], drawById=new Map();
   for(const[id,option]of figures){
@@ -337,6 +338,11 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
     transferMetric=button.dataset.transferMetric;
     document.querySelectorAll('[data-transfer-metric]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
     drawById.get('transfer-chart')?.();
+  }));
+  document.querySelectorAll('[data-local-metric]').forEach(button=>button.addEventListener('click',()=>{
+    localMetric=button.dataset.localMetric;
+    document.querySelectorAll('[data-local-metric]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
+    drawById.get('local-learning-chart')?.();
   }));
   const links=[...document.querySelectorAll('.contents a[href]')];
   const sections=links.filter(a=>a.hash).map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);

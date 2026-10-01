@@ -177,3 +177,28 @@ html[data-layout=continuous]{--nav-offset:82px;scroll-padding-top:82px}
 [data-layout=continuous] .adaptation-highlight{font:17px/1.8 Georgia,serif;color:#46594b;max-width:850px;margin:0 0 25px}
 [data-layout=continuous] #external-chart{height:350px}
 @media(max-width:640px){[data-layout=continuous] .adaptation-highlight{font-size:16px}[data-layout=continuous] #external-chart{height:330px}}
+
+[data-layout=continuous] .key-evidence{margin-top:44px;padding-top:32px;border-top:1px solid #d9ded8}
+[data-layout=continuous] .compact-evidence-figure{margin:22px 0 0;max-width:840px}
+[data-layout=continuous] .compact-table-wrap{max-width:100%;overflow-x:auto}
+[data-layout=continuous] .compact-evidence-table{width:100%;border-collapse:collapse;font:14px/1.55 Inter,sans-serif;font-variant-numeric:tabular-nums;color:#3f4a40}
+[data-layout=continuous] .compact-evidence-table th,[data-layout=continuous] .compact-evidence-table td{padding:12px 16px;text-align:right;border-bottom:1px solid #e2e5df;white-space:normal}
+[data-layout=continuous] .compact-evidence-table th:first-child{text-align:left}
+[data-layout=continuous] .compact-evidence-table thead th{font-weight:500;color:#586451;background:#f5f6f2}
+[data-layout=continuous] .compact-evidence-table tbody th{font-weight:500}
+[data-layout=continuous] .control-evidence-table tr:nth-child(3)>*{border-top:1px solid #aab4a7}
+[data-layout=continuous] .control-evidence-table .noise-enabled td:nth-last-child(-n+2){font-weight:600;color:#40563d}
+[data-layout=continuous] .hands-evidence-table .shared-result{background:#f2f5ee}
+[data-layout=continuous] .compact-evidence-figure figcaption{margin-top:14px;font:12px/1.75 Inter,sans-serif;color:#758073}
+[data-layout=continuous] .compact-chart-controls{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 18px}
+[data-layout=continuous] .compact-chart-controls button{border:1px solid #cbd2c6;border-radius:3px;background:#fff;color:#56614e;padding:8px 13px;font:13px/1.3 Inter,sans-serif;cursor:pointer}
+[data-layout=continuous] .compact-chart-controls button[aria-pressed=true]{background:#43563d;border-color:#43563d;color:#fff}
+[data-layout=continuous] .compact-chart-controls button:focus-visible{outline:2px solid #a36b35;outline-offset:3px}
+[data-layout=continuous] #local-learning-chart{height:310px}
+[data-layout=continuous] .local-evidence-legend .key.gray:before{background:#818b93}
+@media(max-width:640px){
+[data-layout=continuous] .key-evidence{margin-top:32px;padding-top:25px}
+[data-layout=continuous] .compact-evidence-table{font-size:12px}
+[data-layout=continuous] .compact-evidence-table th,[data-layout=continuous] .compact-evidence-table td{padding:10px 6px}
+[data-layout=continuous] .local-evidence-legend{gap:8px 14px;font-size:12px}
+}
