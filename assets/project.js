@@ -1,8 +1,5 @@
 (() => {
   'use strict';
-  const overview = document.getElementById('project-overview');
-  const showcase = document.getElementById('hero-policy-showcase');
-  if (overview && showcase) overview.append(showcase);
   const citation = document.getElementById('citation-bibtex');
   const button = document.getElementById('copy-citation');
   const status = document.getElementById('citation-status');

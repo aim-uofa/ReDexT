@@ -20,7 +20,7 @@
   const previous = document.getElementById('hero-prev');
   const next = document.getElementById('hero-next');
   const restart = document.getElementById('hero-restart');
-  [toggle, previous, next, restart].forEach(button => { if (button) button.hidden = false; });
+  [toggle, previous, next, restart, advance].forEach(control => { if (control) { control.hidden = false; control.disabled = false; } });
   let index = 0, loops = 0, generation = 0, frame = 0, master = videos[1];
   let ready = false, loading = false, failed = false, buffering = false;
   let intended = true, playing = false, starting = false, suppressed = false;
