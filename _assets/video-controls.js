@@ -17,7 +17,7 @@
   const panel = document.createElement('section');
   panel.id = 'reuse-preview-panel'; panel.className = 'reuse-preview-panel';
   root.querySelector('figcaption').before(panel);
-  root.querySelector('figcaption').innerHTML = 'One pretrained policy, with offline IK for each trajectory. <a href="#hero-video-scope">How to read this comparison</a><span id="hero-status" role="status" hidden></span>';
+  root.querySelector('figcaption').innerHTML = 'One pretrained policy, with offline IK for each trajectory. <a href="assets/paper.pdf">Method and evaluation details</a><span id="hero-status" role="status" hidden></span>';
   const ref = offset => `<span data-reuse-ref="${offset}">${String((current+offset)%count+1).padStart(2,'0')}</span>`;
   const loop = '<svg class="refit-loop" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6A8 8 0 1 0 20 16 M19 2V7H14"/></svg>';
   function reportedTime(key) {

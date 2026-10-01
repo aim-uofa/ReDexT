@@ -173,3 +173,7 @@ html[data-layout=continuous]{--nav-offset:82px;scroll-padding-top:82px}
 [data-layout=continuous] .gallery-enlarge{min-width:0;max-width:100%;white-space:normal;overflow-wrap:anywhere;gap:5px;font-size:13px;box-sizing:border-box}
 [data-layout=continuous] .gallery-enlarge span{flex:0 0 auto;font-size:12px}
 }
+
+[data-layout=continuous] .adaptation-highlight{font:17px/1.8 Georgia,serif;color:#46594b;max-width:850px;margin:0 0 25px}
+[data-layout=continuous] #external-chart{height:350px}
+@media(max-width:640px){[data-layout=continuous] .adaptation-highlight{font-size:16px}[data-layout=continuous] #external-chart{height:330px}}

@@ -145,6 +145,7 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
     return rateTooltip(o, metric);
   }
   function external(d, split, mobile) {
+    d = {...d, external: d.external.filter(method => ['ik', 'default', 'spider', 'chord', 'dexmachina', 'manip'].includes(method.id))};
     const o = base('Mean-error SR (%)');
     o.grid = { left: mobile ? 111 : 135, right: 66, top: 40, bottom: 40 };
     o.xAxis = { ...axis, type: 'value', min: 0, max: 100, interval: 25 };
@@ -215,10 +216,10 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
     return o;
   }
   function sharedSummary(d) {
-    const o = base('One shared policy per initialization (n=256)');
-    o.xAxis.data = ['Full-pool\nSR', 'ReDexT\nSR', 'Full-pool\nHCR', 'ReDexT\nHCR'];
-    o.series = [['Frozen', d.fullPool.all, d.frozen.all, colors[1]], ['Shared-adapted', d.fullPoolShared.all, d.shared.all, colors[0]]].map(([label, full, ours, color]) =>
-      bar(label, ['success', 'complete'].flatMap(metric => [full, ours].map(g => ({ n: g.n, success: g[metric] }))), 'success', color));
+    const o = base('Shared adaptation on 256 target trajectories');
+    o.xAxis.data = ['Mean-error success\nSR', 'Horizon completion\nHCR'];
+    o.series = [['Frozen', d.frozen.all, colors[1]], ['Shared-adapted', d.shared.all, colors[0]]].map(([label, group, color]) =>
+      bar(label, ['success', 'complete'].map(metric => ({ n: group.n, success: group[metric] })), 'success', color));
     o.yAxis.name = '%';
     o.tooltip.formatter = params => escape(params[0].axisValue) + ' (%)<br>' + params.map(p =>
       p.marker + ' ' + escape(p.seriesName) + ': <b>' + number(p.value) + '%</b> (' + p.data.count + '/' + p.data.n + ')').join('<br>');
@@ -308,23 +309,14 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
   const d=window.REDEXT_PAPER, api=window.ReDexTCharts;
   let transferMetric='success';
   const figures=[
-    ['execution-sr',()=>api.grouped(d,'frozen','object','success')],
-    ['execution-hcr',()=>api.grouped(d,'frozen','object','complete')],
-    ['training-chart',()=>api.trainingSummary(d)],
     ['external-chart',el=>api.external(d,'all',el.clientWidth<500)],
-    ['transfer-chart',el=>{const small=el.clientWidth<620;el.classList.toggle('stacked-panels',small);return api.transfer(d,transferMetric,small)}],
-    ['coverage-chart',()=>api.coverage(d)],
-    ['selection-chart',el=>api.continuation(d,el.clientWidth<620)],
-    ['adaptation-sr',()=>window.ReDexTStory.adaptation(d,'sr')],
-    ['adaptation-hcr',()=>window.ReDexTStory.adaptation(d,'hcr')],
-    ['local-quality-chart',el=>api.localQuality(d,el.clientWidth<620)],
     ['shared-chart',()=>api.sharedSummary(d)]
   ];
   const redraw=[], drawById=new Map();
   for(const[id,option]of figures){
     const el=document.getElementById(id);
     if(!el)continue;
-    if(!window.echarts||!d||!api){el.className+=' chart-fallback';el.textContent='Interactive figure unavailable. Exact values are included in the numerical tables below.';continue;}
+    if(!window.echarts||!d||!api){el.className+=' chart-fallback';el.textContent='Interactive figure unavailable. Complete results are available in the paper.';continue;}
     let chart;
     const draw=()=>{
       if(!el.clientWidth)return;
