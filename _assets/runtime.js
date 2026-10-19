@@ -130,20 +130,6 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
       label: { show: true, position: 'top', color: '#454545', fontSize: 13, formatter: p => number(p.value, 1) },
       data: rows.map(r => ({ value: 100 * r[metric] / r.n, count: r[metric], n: r.n })) };
   }
-  function rateTooltip(o, metric) {
-    o.tooltip.formatter = params => escape(params[0].axisValue.replace(/\n/g, ' ')) + '<br>' + metricNames[metric] + '<br>' + params.map(p =>
-      p.marker + ' ' + escape(p.seriesName) + ': <b>' + number(p.value) + '%</b> (' + p.data.count + '/' + p.data.n + ')').join('<br>');
-    return o;
-  }
-  function grouped(d, kind, partition, metric) {
-    const strata = d.strata.filter(s => partition === 'dataset' ? ['all', 'OakInk-v2', 'DexYCB'].includes(s.id) : ['all','seen','unseen'].includes(s.id));
-    const o = base(metricNames[metric]);
-    o.xAxis.data = strata.map(s => s.label.replace(' objects', '\nobjects') + '\n(n=' + s.n + ')');
-    const methods = kind === 'shared' ? [['Frozen', d.frozen, colors[1]], ['Shared-adapted', d.shared, colors[0]]] :
-      [['IK-only', d.ik, colors[4]], ['ReDexT', d.frozen, colors[0]]];
-    o.series = methods.map(([label, data, color]) => bar(label, strata.map(s => data[s.id]), metric, color));
-    return rateTooltip(o, metric);
-  }
   function external(d, split, mobile) {
     d = {...d, external: d.external.filter(method => ['ik', 'default', 'spider', 'chord', 'dexmachina', 'manip'].includes(method.id))};
     const o = base('Mean-error SR (%)');
@@ -166,55 +152,6 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
     } };
     return o;
   }
-  function transfer(d, metric, mobile) {
-    const o = base(metricNames[metric]);
-    o.title = ['Known trajectories (192 seeds)', 'Held-out clean IK (256 trajectories)'].map((text, i) => ({
-      text, left: mobile ? 0 : i ? '54%' : 0, top: mobile && i ? '53%' : 0,
-      textStyle: { fontSize: 14, fontWeight: 500 }, padding: 0 }));
-    o.grid = mobile ? [{ left: 47, right: 20, top: 38, height: '32%' }, { left: 47, right: 20, top: '60%', height: '31%' }] :
-      [{ left: 47, right: '55%', top: 42, bottom: 62 }, { left: '58%', right: 20, top: 42, bottom: 62 }];
-    const categories = [['SPIDER\nbase', 'IK\nbase'], ['SPIDER\ntraining', 'IK\ntraining']];
-    o.xAxis = categories.map((data, i) => ({ ...o.xAxis, gridIndex: i, data }));
-    o.yAxis = [0, 1].map(i => ({ ...o.yAxis, gridIndex: i }));
-    o.series = [];
-    d.transfer.seed.forEach((s, i) => {
-      o.series.push({ ...bar(s.label, [s.spider, s.ik], metric, i ? '#9fa9af' : colors[0]), xAxisIndex: 0, yAxisIndex: 0 });
-      o.series.push({ ...bar(s.label, d.transfer.heldout.slice(i * 2, i * 2 + 2), metric, i ? '#9fa9af' : colors[0]), xAxisIndex: 1, yAxisIndex: 1 });
-    });
-    return rateTooltip(o, metric);
-  }
-  function coverage(d) {
-    const o = base('Candidate trajectories (n=473)');
-    o.grid.bottom = 48;
-    o.xAxis.data = d.rounds.map(r => r.round ? 'R' + r.round : 'Bootstrap');
-    o.yAxis = { ...o.yAxis, max: 473, interval: 100 };
-    o.series = [['Current successes', 'current', colors[0]], ['Ever successful', 'ever', colors[1]]].map(([name, key, color]) => ({
-      name, type: 'line', smooth: false, showSymbol: true, symbol: key === 'ever' ? 'diamond' : 'circle', symbolSize: 7,
-      lineStyle: { width: 2, type: key === 'ever' ? 'dashed' : 'solid' }, itemStyle: { color }, data: d.rounds.map(r => r[key]) }));
-    o.tooltip.formatter = params => {
-      const r = d.rounds[params[0].dataIndex];
-      return (r.round ? 'Round ' + r.round : 'Bootstrap, before candidate training') + '<br>' +
-        'Current: <b>' + r.current + '/473</b><br>Ever successful: ' + r.ever + '/473' +
-        (r.round ? '<br>Retained: ' + r.retained + '/' + r.previous + '<br>Lost: ' + r.lost + '<br>First success: ' + r.first +
-          '<br>Reacquired: ' + r.reacquired + '<br>Training tasks: 192 seeds + ' + r.trainedCandidates + ' candidates' : '');
-    };
-    return o;
-  }
-  function endpoints(d, key, metric, mobile) {
-    const o = base(metricNames[metric]), rows = d[key];
-    o.xAxis.data = rows.map(r => r.label.replace('All candidates', 'All\ncandidates').replace('Success-only', 'Success-\nonly').replace('Lowest-error', 'Lowest-\nerror').replace(', ', '\n'));
-    if (mobile) o.xAxis.axisLabel.fontSize = 12;
-    o.series = [bar('Frozen', rows.map(r => r.before), metric, colors[1]), bar('Shared-adapted', rows.map(r => r.after), metric, colors[0])];
-    return rateTooltip(o, metric);
-  }
-  function trainingSummary(d) {
-    const o = base('Frozen policies (n=256)');
-    o.xAxis.data = ['ReDexT-B\n50k bootstrap', 'Full-pool\n100k', 'ReDexT\n100k total'];
-    const rows = [d.bootstrap.all, d.fullPool.all, d.frozen.all];
-    o.series = [bar('SR', rows, 'success', colors[0]), bar('HCR', rows, 'complete', colors[1])];
-    o.tooltip.formatter = ps => escape(ps[0].axisValue.replace(/\n/g, ' ')) + '<br>' + ps.map(p => p.marker + ' ' + p.seriesName + ': <b>' + number(p.value) + '%</b> (' + p.data.count + '/' + p.data.n + ')').join('<br>');
-    return o;
-  }
   function sharedSummary(d) {
     const o = base('Shared adaptation on 256 target trajectories');
     o.xAxis.data = ['Mean-error success\nSR', 'Horizon completion\nHCR'];
@@ -225,62 +162,7 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
       p.marker + ' ' + escape(p.seriesName) + ': <b>' + number(p.value) + '%</b> (' + p.data.count + '/' + p.data.n + ')').join('<br>');
     return o;
   }
-  function localQuality(d, mobile) {
-    const q = d.localAdaptation.commonQuality, o = base('Error / Local-RL error (lower is better)');
-    o.grid = { left: mobile ? 118 : 145, right: 30, top: 40, bottom: 40 };
-    o.xAxis = { ...axis, type: 'value', min: 0, max: 1, interval: .25 };
-    o.yAxis = { ...axis, type: 'category', inverse: true, data: q.map(r => r.label.replace('position', 'pos.').replace('rotation', 'rot.')), splitLine: { show: false }, axisLabel: { ...axis.axisLabel, fontSize: mobile ? 11 : 13 } };
-    o.series = [['r5', 'ReDexT (local)', colors[0]], ['bootstrap', 'ReDexT-B (local)', colors[1]], ['random', 'Local-RL', colors[4]]].map(([key, name, color]) => ({
-      name, type: 'bar', barMaxWidth: 12, itemStyle: { color }, emphasis: { focus: 'series' },
-      data: q.map(r => ({ value: r.values[key] / r.values.random, absolute: r.values[key], unit: r.unit }))
-    }));
-    o.tooltip.formatter = ps => escape(ps[0].name) + '<br>Same 55 successful trajectories<br>' + ps.map(p => p.marker + escape(p.seriesName) + ': <b>' + number(p.data.absolute, 5) + ' ' + p.data.unit + '</b> (' + number(p.value, 3) + '×)').join('<br>');
-    return o;
-  }
-  function gains(d, contrast) {
-    const p = d.gains[contrast], o = base('Paired trajectories (n=256)');
-    o.xAxis.data = ['New\nsuccess', 'Lost\nsuccess', 'Retained\nsuccess', 'Both\nfail'];
-    o.yAxis = { ...o.yAxis, max: 256, interval: 64 };
-    o.series = [{ name: 'Trajectories', type: 'bar', barMaxWidth: 48,
-      label: { show: true, position: 'top', fontSize: 15 },
-      data: ['gained','lost','both','neither'].map((key, i) => ({ value: p[key], key,
-        itemStyle: { color: [colors[0], '#a85d62', colors[2], '#b9bec2'][i] } })) }];
-    o.tooltip = { ...o.tooltip, trigger: 'item', formatter: r => {
-      const denominator = r.data.key === 'gained' ? p.gained + p.neither : ['lost','both'].includes(r.data.key) ? p.both + p.lost : null;
-      return escape(r.name.replace('\n', ' ')) + ': <b>' + r.value + '/256</b>' + (denominator ? '<br>' + number(r.value / denominator * 100) +
-        '% of initial ' + (r.data.key === 'gained' ? 'failures' : 'successes') + ' (' + r.value + '/' + denominator + ')' : '');
-    } };
-    return o;
-  }
-  function transition(d, from) {
-    const p = d.transitions.sharedAdaptation, n = p.before[from], o = base('After shared adaptation (n=' + n + ')');
-    o.xAxis.data = ['Mean-error\nfailure', 'Mean-only\nsuccess', 'Joint\nsuccess'];
-    o.yAxis = { ...o.yAxis, max: n, minInterval: 1 }; delete o.yAxis.interval;
-    o.series = [{ name: 'Trajectories', type: 'bar', barMaxWidth: 48,
-      label: { show: true, position: 'top', fontSize: 15 },
-      data: p.states.map((key, i) => ({ value: p.counts[from][key], itemStyle: { color: ['#a7aeb3', '#dfbb85', colors[0]][i] } })) }];
-    o.tooltip = { ...o.tooltip, trigger: 'item', formatter: r => escape(r.name.replace(/\n/g, ' ')) + ': <b>' +
-      r.value + '/' + n + '</b> (' + number(r.value / n * 100) + '%)<br>Conditional on the selected frozen outcome' };
-    return o;
-  }
-  function continuation(d, mobile) {
-    const rows = [{label:'Seed continuation',before:d.seedContinuation.before},
-      ...[...d.selectors].sort((a,b) => Number(b.label==='All candidates')-Number(a.label==='All candidates'))];
-    const o = base('Frozen evaluation after 50k further updates (%)');
-    o.title.textStyle.fontSize = mobile ? 11 : 14;
-    o.grid = {left:mobile?117:156,right:mobile?37:56,top:42,bottom:35};
-    o.xAxis = {...axis,type:'value',min:0,max:50,interval:10};
-    o.yAxis = {...axis,type:'category',inverse:true,data:rows.map(r=>r.label.replace('Random','Random-failure')),
-      axisLabel:{...axis.axisLabel,fontSize:mobile?10:13},splitLine:{show:false}};
-    o.series = [['SR','success',colors[0]],['HCR','complete',colors[1]]].map(([name,key,color]) => ({
-      ...bar(name,rows.map(r=>r.before),key,color),barMaxWidth:15,
-      label:{show:true,position:'right',color:'#53616a',fontSize:mobile?10:12,formatter:p=>number(p.value,2)}
-    }));
-    o.tooltip.formatter = ps => escape(ps[0].axisValue)+'<br>Frozen clean IK · ablation configuration<br>'+
-      ps.map(p=>p.marker+' '+p.seriesName+': <b>'+number(p.value)+'%</b> ('+p.data.count+'/'+p.data.n+')').join('<br>');
-    return o;
-  }
-  return { grouped, external, transfer, coverage, endpoints, continuation, trainingSummary, sharedSummary, localQuality, gains, transition, colors, number, metricNames };
+  return { external, sharedSummary, colors, number, metricNames };
 });
 
 ;
@@ -307,7 +189,6 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
 (function(){
   'use strict';
   const d=window.REDEXT_PAPER, api=window.ReDexTCharts;
-  let transferMetric='success';
   const figures=[
     ['external-chart',el=>api.external(d,'all',el.clientWidth<500)],
     ['shared-chart',()=>api.sharedSummary(d)],
@@ -325,7 +206,6 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
       const o=option(el);
                                                                             
       o.legend={show:false};
-      if(id==='transfer-chart')o.series.filter(s=>s.name==='No control noise').forEach(s=>s.itemStyle.color='#818b93');
       if(id==='external-chart')o.series[0].data.forEach(r=>r.itemStyle.color=r.method.id==='default'?'#bc652d':'#929ca2');
       if(!chart)chart=echarts.init(el,null,{renderer:'canvas'});
       chart.resize();chart.setOption(o,{notMerge:true});
@@ -335,11 +215,6 @@ var yo={},mo={};var xo,_o=function(){function t(t,e,n){var i=this;this._sleepAft
   }
   if(!('ResizeObserver'in window))window.addEventListener('resize',()=>redraw.forEach(f=>f()));
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>redraw.forEach(f=>f()));
-  document.querySelectorAll('[data-transfer-metric]').forEach(button=>button.addEventListener('click',()=>{
-    transferMetric=button.dataset.transferMetric;
-    document.querySelectorAll('[data-transfer-metric]').forEach(b=>b.setAttribute('aria-pressed',String(b===button)));
-    drawById.get('transfer-chart')?.();
-  }));
   const links=[...document.querySelectorAll('.contents a[href]')];
   const sections=links.filter(a=>a.hash).map(a=>document.getElementById(a.hash.slice(1))).filter(Boolean);
   const mark=()=>{
